@@ -1,27 +1,27 @@
 import tkinter as tk
 from tkinter import messagebox
 
-class MemoryBlock:
+class MemBlock:
     def __init__(self, size):
         self.size = size
         self.is_free = True
 
-class FirstFitAllocator:
+class FirstFitAlloc:
     def __init__(self, total_memory):
         """
         Initializes the memory allocator with a fixed total memory size.
         """
-        self.memory = [MemoryBlock(total_memory)]
+        self.memory = [MemBlock(total_memory)]
 
     def allocate(self, process_size):
         """
-        Allocates memory to a process using the First Fit Algorithm.
+        Allocates memory to a process.
         """
         for i, block in enumerate(self.memory):
             if block.is_free and block.size >= process_size:
                 # Split the block if there is leftover space
                 if block.size > process_size:
-                    self.memory.insert(i + 1, MemoryBlock(block.size - process_size))
+                    self.memory.insert(i + 1, MemBlock(block.size - process_size))
                 block.size = process_size
                 block.is_free = False
                 return i
@@ -29,7 +29,7 @@ class FirstFitAllocator:
 
     def deallocate(self, block_index):
         """
-        Frees the memory block at the specified index.
+        Frees the memory block for an index.
         """
         if 0 <= block_index < len(self.memory):
             block = self.memory[block_index]
@@ -49,7 +49,7 @@ class FirstFitAllocator:
 
     def display_memory(self):
         """
-        Returns the current state of the memory blocks as a list of strings.
+        Returns the current state of the memory blocks.
         """
         memory_state = []
         for i, block in enumerate(self.memory):
@@ -98,7 +98,7 @@ class MemoryAllocatorApp:
     def initialize_allocator(self):
         try:
             total_memory = int(self.total_memory_entry.get())
-            self.allocator = FirstFitAllocator(total_memory)
+            self.allocator = FirstFitAlloc(total_memory)
             self.update_memory_display()
             messagebox.showinfo("Success", "Memory allocator initialized.")
         except ValueError:
